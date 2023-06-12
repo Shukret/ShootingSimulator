@@ -114,7 +114,7 @@
                               if (data.keys) 
                               {
                                   console.log(data.keys[0].value);
-                                  myGameInstance.SendMessage('Init', 'SetPlayerData', data.keys[0]);
+                                  myGameInstance.SendMessage('Init', 'SetPlayerData', data.keys[0].value);
                               }
                             })
                             .catch((error) => {
