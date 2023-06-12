@@ -99,20 +99,36 @@
       script.src = loaderUrl;
 
       script.onload = () => {
-                  createUnityInstance(canvas, config, (progress) => {
-                    progressBarFull.style.width = 100 * progress + "%";
-                }).then((unityInstance) => {
-                      myGameInstance = unityInstance;
-                      vkBridge.send("VKWebAppInit", {});
-                      loadingBar.style.display = "none";
-                      //getLang();
-                      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) 
-                      {
-                        //
-                      }   
-                      }).catch((message) => {
-                    alert(message);
-                  });
+
+        createUnityInstance(canvas, config, (progress) => {
+                          progressBarFull.style.width = 100 * progress + "%";
+                      }).then((unityInstance) => {
+                            myGameInstance = unityInstance;
+                            vkBridge.send("VKWebAppInit", {});
+                            vkBridge.send('VKWebAppStorageGet', {
+                            keys: [
+                              //массив названий ключей, значения которых хотим получить
+                              'PlayerData'
+                            ]})
+                            .then((data) => { 
+                              if (data.keys) 
+                              {
+                                  myGameInstance.SendMessage('Init', 'SetPlayerData', data.keys[0]);
+                              }
+                            })
+                            .catch((error) => {
+                              // Ошибка
+                              console.log(error);
+                            });
+                            loadingBar.style.display = "none";
+                            //getLang();
+                            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) 
+                            {
+                              myGameInstance.SendMessage('Init', 'ItIsMobile');
+                            }   
+                            }).catch((message) => {
+                          alert(message);
+                        });
       };
       document.body.appendChild(script);
     </script>
