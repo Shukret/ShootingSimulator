@@ -113,7 +113,7 @@
                             .then((data) => { 
                               if (data.keys) 
                               {
-                                  console.log(data.keys[0]);
+                                  console.log(data.keys[0].value);
                                   myGameInstance.SendMessage('Init', 'SetPlayerData', data.keys[0]);
                               }
                             })
